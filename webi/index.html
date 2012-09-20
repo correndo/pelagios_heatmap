@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+  <title>PELAGIOS provinces</title>
+    <link rel="icon" type="image/png" href="http://a0.twimg.com/profile_images/1665746133/pelagios_icon_mini.png">
+  <!-- bootstrap -->
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <link href="css/bootstrap-responsive.css" rel="stylesheet">
+  <style>
+  body {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    }
+    .container-fluid,
+    .row-fluid { height: inherit; }
+    .span4 { height: inherit; height:90%;}
+    .span8 { height: inherit; height:100%;}
+    .map { width:100%; height:90%;}
+    .map img { max-width:none; }
+    .olControlSLDSelectBoxActive {
+            cursor: crosshair;
+        }
+        .olControlSLDSelectPolygonActive {
+            cursor: crosshair;
+        }
+        .olControlSLDSelectLineActive {
+            cursor: crosshair;
+        }
+        .olControlSLDSelectPointActive {
+            cursor: pointer;
+        }
+  </style>
+
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  
+  <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+
+  <script src="http://openlayers.org/dev/OpenLayers.js"></script>
+  <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery.pajinate.js"></script>
+  <link type="text/css" rel="stylesheet" href="css/pstyles.css" />
+
+  <script type="text/javascript" src="js/wax.g.min-6.0.4.js"></script>
+  <script type="text/javascript" src="dist/leaflet-src.js"></script>
+  <script type="text/javascript" src="app/pelagios_api.js"></script>  
+  <script type="text/javascript" src="app/pelagios.js"></script>
+
+  <script type="text/javascript" src="js/heatmap.js"></script>
+  <script type="text/javascript" src="js/heatmap-openlayers.js"></script>
+  <script type="text/javascript" src="js/bootstrap-modal.js"></script>
+  <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
+  <script type="text/javascript" src="js/bootstrap-button.js"></script>
+  <script type="text/javascript" src="js/bootstrap-dropdown.js"></script>
+  <script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
+  <script type="text/javascript" src="js/bootstrap-popover.js"></script>
+  <script type="text/javascript" src="js/require.min.js" ></script>
+  <script type="text/javascript" src="js/awld.js?autoinit"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33112816-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body onload="initialize()">
+
+<div class="navbar navbar-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">PELAGIOS</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="#about" id="about">About</a></li>
+              <li><a href="#contact" id="contact">Contact</a></li>
+              <li><div id="pelagios_province"></div></li>
+              <li><div id="wait_province"></div></li>
+              <!--li class="dropdown" id="menu1">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
+                    Get PELAGIOS infos
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a id="getplaces" href="#getplaces">Places</a></li>
+                    <li><a id="getdocs" href="#fetdatasets">Datasets</a></li>
+                  </ul>
+                </li-->
+
+            </ul>
+          </div><!--/.nav-collapse -->
+          <!--button id="provbutton" class="btn" data-toggle="button">Roman provinces 117</button>
+          <!--button id="getdocs" class="btn">Get Datasets</button -->
+          
+        </div>
+      </div>
+    </div> 
+
+
+  <div class="container-fluid">
+   <div class="row-fluid" style="height:90%;">
+    <div class="span8">
+      <div id="map" class="map"></div>
+    </div>
+    <div class="span4 well sidebar-nav" id="pelagios-data">
+       <ul class="nav nav-list">
+          <li class="nav-header">PELAGIOS data</li>
+          <li id="pelagios_province"> </li>
+          <div id="pelagios_search">
+            <!--li class="nav-header" for="tags">Place: </li>
+            <input id="tags" style="width:100%;" -->
+          </div>
+          </li>
+          <div id="pelagios_result" style="overflow-y: auto;"></div>
+          <div id="wait_annotations"></div>
+          <!--div id="pelagios_dataset" style="overflow-y: auto;"></div-->
+          <li id="pelagios_annotations" style="overflow-y: auto;" class="awld-scope">
+
+          </li>
+        </ul>
+    </div>
+   </div> 
+  </div>
+
+<!-- About window code-->
+<div class="modal hide" id="aboutWindow">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4>About PELAGIOS Provinces</h4>
+  </div>
+  <div class="modal-body">
+    <p>
+    <b>PELAGIOS Provinces</b> is an interface over a set of services implemented by PELAGIOS project.</p>
+    <p> 
+    The PELAGIOS HTTP API enables the search and browse of the PELAGIOS network of place references. They support responses in JSON/JSONP or RDF (XML and Turtle). The PELAGIOS APIs can be accessed via the following link <a href="http://pelagios.dme.ait.ac.at/api">http://pelagios.dme.ait.ac.at/api</a>. 
+    </p>
+    <p>
+    Further API allows the mereological query of PELAGIOS places by using the shapes of roman provinces. Roman provinces shapes have been digitised from Barrington Atlas rasters by Pedar Foss at Depauw University in 2007 within the <a href"http://cgma.depauw.edu/MAGIS/">MAGIS project</a> and  redistribute by AWMC under (cc-by).
+    </p>
+  </div>
+  <div class="modal-footer">
+  </div>
+</div>
+
+
+<!-- Contacts window code-->
+<div class="modal hide" id="contactWindow">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4>Contacts</h4>
+  </div>
+  <div class="modal-body">
+    <p> <b>PELAGIOS Provinces</b> has been implemented by <a href="http://www.ecs.soton.ac.uk/people/gc3">Gianluca Correndo</a> in collaboration with PELAGIOS project.</p>
+  </div>
+  <div class="modal-footer">
+  </div>
+</div>
+
+</body>
+</html>
